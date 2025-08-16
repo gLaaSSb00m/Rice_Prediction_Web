@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block title %}Rice Image Prediction{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="card p-4">
+                <h2 class="text-center text-success">Upload Rice Image</h2>
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="rice_image" class="form-label">Choose Image</label>
+                        <input type="file" class="form-control" id="rice_image" name="rice_image" accept="image/*" required>
+                    </div>
+                    <button type="submit" class="btn btn-success w-100">Predict</button>
+                </form>
+
+                {% if error %}
+                <div class="mt-4 alert alert-danger">
+                    {{ error }}
+                </div>
+                {% endif %}
+
+                {% if message %}
+                <div class="mt-4 alert alert-success">
+                    {{ message }}
+                </div>
+                {% endif %}
+
+                {% if predicted_variety %}
+                <div class="mt-4">
+                    <label for="variety_display" class="form-label">Rice Variety Name</label>
+                    <input type="text" class="form-control" id="variety_display" name="variety_display" value="{{ predicted_variety }}" readonly>
+                </div>
+                <div class="mt-3">
+                    <label for="info_display" class="form-label">Rice Info</label>
+                   <textarea class="form-control" id="info_display" name="info_display" rows="3" readonly>{{ rice_info }}</textarea>
+
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
