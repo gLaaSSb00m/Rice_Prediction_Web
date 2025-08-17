@@ -8,6 +8,7 @@ import numpy as np
 import os
 import warnings
 import traceback
+from .models import RiceInfo
 
 # Rice classification labels (extended to 20 classes)
 RICE_CLASSES = [
@@ -17,12 +18,9 @@ RICE_CLASSES = [
     'Unknown3', 'Unknown4', 'Unknown5', 'Unknown6'
 ]
 # Note: Replace 'Unknown1' to 'Unknown6' with the correct 6 additional classes if available.
-<<<<<<< HEAD
 
-=======
 tf.config.threading.set_intra_op_parallelism_threads(2)
 tf.config.threading.set_inter_op_parallelism_threads(2)
->>>>>>> 50fd73965494c71073b83d2ccf2e5a21042bd94f
 # Define paths
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MODEL_PATH = os.path.join(BASE_DIR, 'ConvNeXtBase_Rice_Classification_lr0001ep25bt32_Adam_CCE.h5')
@@ -79,10 +77,16 @@ def predict(request):
             predicted_class = RICE_CLASSES[predicted_idx]
             confidence = float(np.max(predictions[0]) * 100)
 
+            # Fetch rice info from database
+            try:
+                rice_info_obj = RiceInfo.objects.get(variety_name=predicted_class)
+                rice_info = rice_info_obj.info
+            except RiceInfo.DoesNotExist:
+                rice_info = "No info available for this variety yet."
+
             return render(request, 'prediction/predict.html', {
-                # 'message': f"Predicted Class: {predicted_class} with {confidence:.2f}% confidence",
                 'predicted_variety': predicted_class,
-                'rice_info': "No info available for this variety yet."
+                'rice_info': rice_info
             })
 
         except Exception as e:
@@ -94,8 +98,4 @@ def predict(request):
 
 def home(request):
     """Render the home page."""
-<<<<<<< HEAD
     return render(request, 'prediction/home.html')
-=======
-    return render(request, 'prediction/home.html')
->>>>>>> 50fd73965494c71073b83d2ccf2e5a21042bd94f
