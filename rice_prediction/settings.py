@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 """
 Django settings for rice_prediction project.
 
@@ -30,6 +31,19 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
+=======
+import os
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+# SECURITY
+SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "unsafe-default")
+DEBUG = False
+ALLOWED_HOSTS = ["*"]  # Replace "*" with your Render app domain in production
+
+# Applications
+>>>>>>> 50fd73965494c71073b83d2ccf2e5a21042bd94f
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -40,8 +54,15 @@ INSTALLED_APPS = [
     'prediction',
 ]
 
+<<<<<<< HEAD
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+=======
+# Middleware
+MIDDLEWARE = [
+    'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # add this line
+>>>>>>> 50fd73965494c71073b83d2ccf2e5a21042bd94f
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -49,9 +70,15 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+<<<<<<< HEAD
 
 ROOT_URLCONF = 'rice_prediction.urls'
 
+=======
+ROOT_URLCONF = 'rice_prediction.urls'
+
+# Templates
+>>>>>>> 50fd73965494c71073b83d2ccf2e5a21042bd94f
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -69,10 +96,14 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'rice_prediction.wsgi.application'
 
+<<<<<<< HEAD
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+=======
+# Database (SQLite for demo; use PostgreSQL for production)
+>>>>>>> 50fd73965494c71073b83d2ccf2e5a21042bd94f
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -80,6 +111,7 @@ DATABASES = {
     }
 }
 
+<<<<<<< HEAD
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
@@ -123,4 +155,26 @@ STATICFILES_DIRS = [
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
+=======
+# Password validators
+AUTH_PASSWORD_VALIDATORS = [
+    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
+]
+
+# Internationalization
+LANGUAGE_CODE = 'en-us'
+TIME_ZONE = 'UTC'
+USE_I18N = True
+USE_TZ = True
+
+# Static files
+STATIC_URL = "/static/"
+STATICFILES_DIRS = [BASE_DIR / "static"]
+STATIC_ROOT = BASE_DIR / "staticfiles"
+
+# Default primary key field type
+>>>>>>> 50fd73965494c71073b83d2ccf2e5a21042bd94f
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

@@ -17,7 +17,12 @@ RICE_CLASSES = [
     'Unknown3', 'Unknown4', 'Unknown5', 'Unknown6'
 ]
 # Note: Replace 'Unknown1' to 'Unknown6' with the correct 6 additional classes if available.
+<<<<<<< HEAD
 
+=======
+tf.config.threading.set_intra_op_parallelism_threads(2)
+tf.config.threading.set_inter_op_parallelism_threads(2)
+>>>>>>> 50fd73965494c71073b83d2ccf2e5a21042bd94f
 # Define paths
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MODEL_PATH = os.path.join(BASE_DIR, 'ConvNeXtBase_Rice_Classification_lr0001ep25bt32_Adam_CCE.h5')
@@ -89,4 +94,8 @@ def predict(request):
 
 def home(request):
     """Render the home page."""
+<<<<<<< HEAD
     return render(request, 'prediction/home.html')
+=======
+    return render(request, 'prediction/home.html')
+>>>>>>> 50fd73965494c71073b83d2ccf2e5a21042bd94f

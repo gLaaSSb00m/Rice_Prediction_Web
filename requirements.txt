@@ -2,3 +2,8 @@ Django==5.2.5
 tensorflow==2.15.0
 pillow==10.3.0
 numpy==1.26.4
+<<<<<<< HEAD
+=======
+python-dotenv
+gunicorn==21.2.0
+>>>>>>> 50fd73965494c71073b83d2ccf2e5a21042bd94f
