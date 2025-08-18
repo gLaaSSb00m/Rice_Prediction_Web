@@ -1,3 +1,6 @@
+import tensorflow as tf
+import numpy as np
+from PIL import Image
 from tensorflow import keras
 
 NUM_CLASSES = 20
@@ -33,21 +36,18 @@ print(model.summary())
 
 
 
-import tensorflow as tf
-import numpy as np
-from PIL import Image
 
 
 RICE_CLASSES = [
-    'Subol lota', 'Bashmoti', 'Ganjiya', 'Shampakatari', 'katarivog',
-    'BR28', 'BR29', 'Paijam', 'Bashful', 'Lal Aush', 'Jirashail',
-    'Gutisharna', 'Red Cargo', 'Najirshail'
+    "1_Subol_Lota","2_Bashmoti","3_Ganjiya","4_Shampakatari","5_Katarivog","6_BR28","7_BR29", "8_Paijam", "9_Bashful",
+    "10_Lal_Aush","11_Jirashail","12_Gutisharna","13_Red_Cargo","14_Najirshail","15_Katari_Polao","16_Lal_Biroi",
+    "17_Chinigura_Polao","18_Amon","19_Shorna5","20_Lal_Binni"
 ]
 
 
 
 # Preprocess image
-image = Image.open('DeshiBashmoti_2_002.jpg').convert('RGB').resize((224, 224))
+image = Image.open('SubolLota_1_019.jpg').convert('RGB').resize((224, 224))
 image_array = np.array(image, dtype=np.float32) / 255.0
 image_array = np.expand_dims(image_array, axis=0)
 

@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.cache import never_cache
 import tensorflow as tf
 from tensorflow import keras
 from PIL import Image
@@ -11,11 +12,12 @@ import traceback
 from .models import RiceInfo
 
 # Rice classification labels (extended to 20 classes)
+
+
 RICE_CLASSES = [
-    'Subol lota', 'Bashmoti', 'Ganjiya', 'Shampakatari', 'katarivog',
-    'BR28', 'BR29', 'Paijam', 'Bashful', 'Lal Aush', 'Jirashail',
-    'Gutisharna', 'Red Cargo', 'Najirshail', 'Unknown1', 'Unknown2',
-    'Unknown3', 'Unknown4', 'Unknown5', 'Unknown6'
+    "1_Subol_Lota","2_Bashmoti","3_Ganjiya","4_Shampakatari","5_Katarivog","6_BR28","7_BR29", "8_Paijam", "9_Bashful",
+    "10_Lal_Aush","11_Jirashail","12_Gutisharna","13_Red_Cargo","14_Najirshail","15_Katari_Polao","16_Lal_Biroi",
+    "17_Chinigura_Polao","18_Amon","19_Shorna5","20_Lal_Binni"
 ]
 # Note: Replace 'Unknown1' to 'Unknown6' with the correct 6 additional classes if available.
 
@@ -52,6 +54,7 @@ except Exception as e:
 
 
 @csrf_exempt
+@never_cache
 def predict(request):
     """Handle rice image prediction requests and render results in the template."""
     warnings.filterwarnings("ignore", category=UserWarning)
@@ -92,8 +95,13 @@ def predict(request):
         except Exception as e:
             return render(request, 'prediction/predict.html', {'error': str(e)})
 
-    # GET request → just render empty form
-    return render(request, 'prediction/predict.html')
+    # GET request → just render empty form with cleared context
+    return render(request, 'prediction/predict.html', {
+        'predicted_variety': None,
+        'rice_info': None,
+        'error': None,
+        'message': None
+    })
 
 
 def home(request):
