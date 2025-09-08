@@ -15,16 +15,16 @@
                     <form id="predictionForm" enctype="multipart/form-data">
                         {% csrf_token %}
                         <div class="mb-3">
-                            <label for="image" class="form-label">Upload Image (e.g., png, jpg)</label>
-                            <input type="file" class="form-control" id="image" name="image" required>
+                            <label for="rice_image" class="form-label">Upload Image (e.g., png, jpg)</label>
+                            <input type="file" class="form-control" id="rice_image" name="rice_image" required>
                         </div>
                         <div class="mb-3">
                             <label for="variety" class="form-label">Rice Variety Name</label>
-                            <input type="text" class="form-control" id="variety" name="variety" required>
+                            <input type="text" class="form-control" id="variety" name="variety" readonly>
                         </div>
                         <div class="mb-3">
                             <label for="info" class="form-label">Rice Info</label>
-                            <textarea class="form-control" id="info" name="info" rows="3" required></textarea>
+                            <textarea class="form-control" id="info" name="info" rows="3" readonly></textarea>
                         </div>
                         <button type="submit" class="btn btn-success">Submit</button>
                     </form>
@@ -56,6 +56,8 @@ document.getElementById('predictionForm').addEventListener('submit', function(e)
     .then(response => response.json())
     .then(data => {
         document.getElementById('predictionResult').textContent = data.message;
+        document.getElementById('variety').value = data.predicted_variety;
+        document.getElementById('info').value = data.rice_info;
         document.getElementById('result').style.display = 'block';
     })
     .catch(error => {

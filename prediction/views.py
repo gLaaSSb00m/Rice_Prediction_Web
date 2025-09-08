@@ -87,9 +87,10 @@ def predict(request):
             except RiceInfo.DoesNotExist:
                 rice_info = "No info available for this variety yet."
 
-            return render(request, 'prediction/predict.html', {
+            return JsonResponse({
                 'predicted_variety': predicted_class,
-                'rice_info': rice_info
+                'rice_info': rice_info,
+                'message': f"Predicted Rice Variety: {predicted_class}\nInfo: {rice_info}"
             })
 
         except Exception as e:
