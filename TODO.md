@@ -1,21 +1,18 @@
-# Rice Classification Implementation TODO
+# TODO: Make Rice Variety Name and Rice Info Fields Uneditable
 
-## Phase 1: Dependencies Setup
-- [ ] Update requirements.txt with tensorflow, pillow, numpy
-- [ ] Install dependencies
+## Steps to Complete:
+- [x] Fix form field name mismatch: Change 'image' to 'rice_image' in predict.html to match views.py
+- [x] Modify Rice Variety Name field: Change to read-only input, populate with predicted_variety
+- [x] Modify Rice Info field: Change to read-only textarea, populate with rice_info
+- [x] Remove 'required' attribute from variety and info fields
+- [x] Update form submission to exclude variety and info from FormData if not needed
+- [x] Test the changes by running the Django server and uploading an image
 
-## Phase 2: Model Integration
-- [ ] Update predict view to handle image upload
-- [ ] Load ConvNeXtBase model from .h5 file
-- [ ] Implement image preprocessing for model input
-- [ ] Add prediction logic using the loaded model
-- [ ] Map model predictions to rice class names
+## Dependent Files:
+- templates/prediction/predict.html
+- prediction/views.py (updated to return JSON for AJAX)
 
-## Phase 3: Frontend Updates
-- [ ] Update predict.html to show actual prediction results
-- [ ] Display predicted rice type with confidence score
-- [ ] Show image preview before upload
-
-## Phase 4: Testing
-- [ ] Test with sample rice images
-- [ ] Verify all 15 rice types are correctly classified
+## Followup Steps:
+- Run `python manage.py runserver` to test the prediction page
+- Upload an image and verify that variety and info are displayed as read-only text
+- Ensure no errors in form submission
