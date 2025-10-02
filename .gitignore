@@ -1,0 +1,8 @@
+.venv
+.vscode
+rice_prediction_flutter
+myenv
+models
+*.tflite
+*.keras
+*h5
