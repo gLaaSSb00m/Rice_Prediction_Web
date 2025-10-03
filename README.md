@@ -1,6 +1,34 @@
 # Rice Classification System
 
-A comprehensive rice variety classification system with both web and mobile applications. Uses a VGG16 deep learning model to classify 62 different types of rice with high accuracy.
+## Project Summary
+
+The Rice Classification System is a web-based application that leverages deep learning technology to accurately classify 62 different varieties of rice grains. Built with Django as the backend framework, it provides an intuitive user interface for uploading rice grain images and receiving instant classification results. The system uses a pre-trained VGG16 convolutional neural network model to analyze images and predict rice types with high confidence scores. This tool is designed for agricultural professionals, researchers, and enthusiasts to quickly identify rice varieties, supporting applications in quality control, research, and education.
+
+## Screenshots
+
+### Home Page
+![Home Page](asset/home.png)
+
+### Before Prediction
+![Before Prediction](asset/before_prediction.png)
+
+### After Prediction
+![After Prediction](asset/after_prediction.png)
+
+## Components Used
+
+The Rice Classification System is composed of several key components with their usage details:
+
+- **Backend Framework**: Django 5.x - Handles server-side logic, routing, and API endpoints
+- **Machine Learning Model**: VGG16 (TensorFlow/Keras) - Pre-trained convolutional neural network for image classification
+- **Image Processing**: PIL/Pillow - Library for image manipulation and preprocessing
+- **Database**: SQLite - Used as the default database for storing application data including user inputs, prediction results, and system configurations. It can be replaced with other databases if needed.
+- **Frontend Technologies**:
+  - HTML5 - Markup for structuring web pages
+  - CSS3 - Styling for responsive and user-friendly design
+  - JavaScript - Adds client-side interactivity and dynamic content
+- **Web Server**: Django's built-in development server for development; WSGI-compatible servers recommended for production deployment
+- **Model Storage**: HDF5 format (.h5) - Stores the trained model weights for loading during prediction
 
 ## 🚀 Features
 
@@ -10,15 +38,7 @@ A comprehensive rice variety classification system with both web and mobile appl
 - **Confidence Scores**: Displays prediction confidence for each rice type
 - **62 Rice Types**: Supports classification of 62 different rice varieties
 - **Responsive Design**: Works on desktop and mobile devices
-- **REST API**: Provides API endpoints for mobile app integration
-
-### Mobile Application (Flutter)
-- **Camera Integration**: Take photos directly from camera
-- **Gallery Access**: Select images from device gallery
-- **Real-time Prediction**: Instant classification using backend API
-- **Cross-platform**: Works on both Android and iOS
-- **Offline Support**: Basic functionality works without internet
-- **Modern UI**: Material Design 3 with intuitive interface
+- **REST API**: Provides API endpoints for potential integrations
 
 ## Installation
 
@@ -45,23 +65,6 @@ python manage.py migrate
 python manage.py runserver
 ```
 
-### Mobile Application
-
-1. Navigate to the mobile app directory:
-```bash
-cd rice_prediction_mobile
-```
-
-2. Get Flutter dependencies:
-```bash
-flutter pub get
-```
-
-3. Run the app on an emulator or device:
-```bash
-flutter run
-```
-
 ## Usage
 
 ### Web
@@ -70,13 +73,6 @@ flutter run
 2. Click on "Predict Rice Type"
 3. Upload a rice grain image
 4. View the classification results with confidence scores
-
-### Mobile
-
-1. Launch the app on your device or emulator
-2. Use the camera or gallery to select a rice grain image
-3. Tap "Predict Rice Variety"
-4. View the prediction results and rice information
 
 ## Model Information
 
@@ -141,21 +137,20 @@ The application can classify the following rice varieties:
 - 51_Binadhan17
 - 52_Binadhan19
 - 53_Binadhan21
-- 54_Binadhan23
-- 55_Binadhan24
-- 56_Binadhan25
-- 57_Binadhan26
-- 58_BR22
-- 59_BR23
-- 60_BRRI67
-- 61_BRRI74
-- 62_BRRI102
+- 54_Binadhan24
+- 55_Binadhan25
+- 56_Binadhan26
+- 57_BR22
+- 58_BR23
+- 59_BRRI67
+- 60_BRRI74
+- 61_BRRI102
+- 62_Binadhan23
 
 ## Technical Stack
 
 - **Backend**: Django 5.x, Django REST Framework
 - **Frontend**: HTML5, CSS3, JavaScript
-- **Mobile**: Flutter (Dart)
 - **ML Framework**: TensorFlow/Keras
 - **Image Processing**: PIL/Pillow
 - **Database**: SQLite (default)
@@ -167,16 +162,13 @@ Rice_Prediction/
 ├── rice_prediction/          # Django project settings
 ├── prediction/               # Main app for rice classification
 │   ├── views.py             # Prediction logic (web)
-│   ├── api_views.py         # API views for mobile app
+│   ├── api_views.py         # API views for integrations
 │   ├── serializers.py       # DRF serializers
 │   ├── models.py            # Database models
 │   └── urls.py              # URL configurations
 ├── templates/               # HTML templates
 ├── static/                  # CSS, JS, images
-├── rice_prediction_mobile/  # Flutter mobile app
-│   ├── lib/                 # Flutter source code
-│   ├── android/             # Android platform code
-│   └── ios/                 # iOS platform code
+├── asset/                   # Screenshots and assets
 ├── requirements.txt         # Python dependencies
 ├── manage.py                # Django management script
 └── README.md
@@ -193,7 +185,7 @@ python manage.py test prediction
 To add support for new rice types, you'll need to:
 1. Retrain the model with new data
 2. Update the class mapping in `views.py` and `api_views.py`
-3. Update the frontend and mobile app to display new types
+3. Update the frontend to display new types
 
 ## Contributing
 

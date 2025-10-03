@@ -30,12 +30,6 @@
                     </form>
                 </div>
             </div>
-            <div id="result" class="mt-4" style="display: none;">
-                <div class="alert alert-success" role="alert">
-                    <h4 class="alert-heading">Prediction Result</h4>
-                    <p id="predictionResult"></p>
-                </div>
-            </div>
         </div>
     </div>
 </div>
@@ -55,15 +49,11 @@ document.getElementById('predictionForm').addEventListener('submit', function(e)
     })
     .then(response => response.json())
     .then(data => {
-        document.getElementById('predictionResult').textContent = data.message;
         document.getElementById('variety').value = data.predicted_variety;
         document.getElementById('info').value = data.rice_info;
-        document.getElementById('result').style.display = 'block';
     })
     .catch(error => {
         console.error('Error:', error);
-        document.getElementById('predictionResult').textContent = 'Error occurred during prediction';
-        document.getElementById('result').style.display = 'block';
     });
 });
 </script>
