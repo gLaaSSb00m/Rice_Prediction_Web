@@ -7,3 +7,4 @@ VGG16_rice62_final.keras
 *.keras
 *h5
 VGG16_rice62_final.weights.h5
+__pycache__

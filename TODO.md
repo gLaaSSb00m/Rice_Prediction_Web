@@ -40,3 +40,24 @@
 - Test the app on a mobile device or emulator
 - Ensure permissions are granted and model loads correctly
 - Verify predictions work with sample images
+
+---
+
+# TODO: Refactor convert_model.py to Match views.py Purpose
+
+## Steps to Complete:
+- [x] Add TensorFlow strategy handling (GPU/CPU) as in views.py
+- [x] Build the model inside the strategy scope with the same architecture
+- [x] Load weights and compile the model
+- [x] Add a prediction function that accepts an image input and returns predicted rice variety and confidence
+- [x] Remove the TFLite conversion logic
+- [x] Make convert_model.py framework-agnostic (no Django dependencies)
+- [x] Test the prediction function with a sample image
+
+## Dependent Files:
+- convert_model.py
+
+## Followup Steps:
+- Run the script to ensure model loads and compiles correctly
+- Test prediction with a sample image file
+- Verify output matches expected format (predicted_variety, confidence)

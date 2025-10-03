@@ -1,0 +1,30 @@
+digraph django_rice_prediction_process {
+    rankdir=TB;
+    node [shape=box, style=filled, color=lightgreen];
+
+    start [label="Start"];
+    user_upload [label="User Uploads Rice Image"];
+    backend_receive [label="Backend Receives Image"];
+    preprocess [label="Preprocess Image (Resize, Normalize)"];
+    model_predict [label="Run Prediction with TensorFlow Model"];
+    fetch_info [label="Fetch Rice Info from Database"];
+    send_response [label="Send JSON Response with Prediction"];
+    display_result [label="Display Prediction on Webpage"];
+    error_handling [label="Handle Errors"];
+    end [label="End"];
+
+    start -> user_upload;
+    user_upload -> backend_receive;
+    backend_receive -> preprocess;
+    preprocess -> model_predict;
+    model_predict -> fetch_info;
+    fetch_info -> send_response;
+    send_response -> display_result;
+    display_result -> end;
+
+    // Error handling paths
+    backend_receive -> error_handling [label="No Image or Invalid"];
+    preprocess -> error_handling [label="Preprocessing Failed"];
+    model_predict -> error_handling [label="Prediction Failed"];
+    error_handling -> end;
+}

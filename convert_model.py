@@ -1,13 +1,33 @@
+import os, warnings, traceback
+import numpy as np
+from PIL import Image
 import tensorflow as tf
 from tensorflow import keras
-import os
+from tensorflow.keras.applications import VGG16
+from tensorflow.keras.layers import GlobalAveragePooling2D, Dropout, Dense, BatchNormalization
+from tensorflow.keras.regularizers import l2
 
-# Define paths
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-MODEL_PATH = os.path.join(BASE_DIR, 'models', 'best_VGG16_stage2.weights.h5')
-TFLITE_MODEL_PATH = os.path.join(BASE_DIR, 'rice_model.tflite')
+# -----------------------------
+# Strategy (GPU/CPU)
+# -----------------------------
+def get_strategy():
+    gpus = tf.config.list_physical_devices("GPU")
+    if gpus:
+        strat = tf.distribute.MirroredStrategy()
+        print(f"✅ Using MirroredStrategy on {len(gpus)} GPU(s).")
+        return strat
+    print("✅ Using default strategy (CPU).")
+    return tf.distribute.get_strategy()
 
-# Rice classes
+strategy = get_strategy()
+print("Replicas:", strategy.num_replicas_in_sync)
+
+# -----------------------------
+# Config
+# -----------------------------
+CHECKPOINT_PATH = os.path.join("models", "best_VGG16_stage2.weights.h5")
+IMAGE_SIZE = (224, 224)
+
 RICE_CLASSES = [
     "10_Lal_Aush","11_Jirashail","12_Gutisharna","13_Red_Cargo","14_Najirshail",
     "15_Katari_Polao","16_Lal_Biroi","17_Chinigura_Polao","18_Amondhan","19_Shorna5",
@@ -22,33 +42,58 @@ RICE_CLASSES = [
     "62_BRRI102","6_BR28","7_BR29","8_Paijam","9_Bashful"
 ]
 
-# Recreate the model architecture
-base_model = keras.applications.VGG16(include_top=False, input_shape=(224, 224, 3), weights="imagenet")
-x = base_model.output
-x = keras.layers.GlobalAveragePooling2D(name="gap")(x)
-x = keras.layers.Dropout(0.3, name="dropout")(x)
-x = keras.layers.Dense(256, activation="relu", kernel_regularizer=keras.regularizers.l2(1e-4), name="dense_256")(x)
-x = keras.layers.BatchNormalization(name="bn")(x)
-outputs = keras.layers.Dense(len(RICE_CLASSES), activation="softmax", dtype="float32", name="pred")(x)
-model = keras.Model(inputs=base_model.input, outputs=outputs, name="VGG16_rice62")
+# -----------------------------
+# Build + Load model
+# -----------------------------
+with strategy.scope():
+    def build_model(num_classes, l2_weight=1e-4, dropout_rate=0.3):
+        base_model = VGG16(include_top=False, input_shape=IMAGE_SIZE + (3,), weights="imagenet")
+        x = base_model.output
+        x = GlobalAveragePooling2D(name="gap")(x)
+        x = Dropout(dropout_rate, name="dropout")(x)
+        x = Dense(256, activation="relu", kernel_regularizer=l2(l2_weight), name="dense_256")(x)
+        x = BatchNormalization(name="bn")(x)
+        outputs = Dense(num_classes, activation="softmax", dtype="float32", name="pred")(x)
+        return keras.Model(inputs=base_model.input, outputs=outputs, name="VGG16_rice62")
 
-# Load weights
-if os.path.exists(MODEL_PATH):
+    model = build_model(len(RICE_CLASSES))
+    loss = keras.losses.CategoricalCrossentropy(label_smoothing=0.05)
+    model.compile(optimizer="adam", loss=loss, metrics=["accuracy"])
+
+    if os.path.exists(CHECKPOINT_PATH):
+        try:
+            model.load_weights(CHECKPOINT_PATH)
+            print("✅ Loaded weights from:", CHECKPOINT_PATH)
+        except Exception as e:
+            print(f"[ERROR] Failed to load weights: {e}")
+    else:
+        print(f"[ERROR] Checkpoint not found at {CHECKPOINT_PATH}")
+
+# -----------------------------
+# Prediction Function
+# -----------------------------
+def predict(image_path):
+    warnings.filterwarnings("ignore", category=UserWarning)
+
     try:
-        model.load_weights(MODEL_PATH)
-        print(f"✅ Loaded weights from {MODEL_PATH}")
+        # Preprocess
+        image = Image.open(image_path).convert("RGB")
+        image = image.resize(IMAGE_SIZE)
+        image_array = np.expand_dims(np.array(image, dtype=np.float32) / 255.0, axis=0)
+
+        preds = model.predict(image_array, verbose=0)
+        idx = int(np.argmax(preds[0]))
+        predicted_class = RICE_CLASSES[idx]
+        confidence = float(np.max(preds[0]) * 100)
+
+        return predicted_class, confidence
+
     except Exception as e:
-        print(f"[ERROR] Failed to load weights: {e}")
-else:
-    print(f"[ERROR] Checkpoint not found at {MODEL_PATH}")
+        traceback.print_exc()
+        raise e
 
-# Convert to TFLite
-converter = tf.lite.TFLiteConverter.from_keras_model(model)
-tflite_model = converter.convert()
-
-# Save TFLite model
-
-with open(TFLITE_MODEL_PATH, 'wb') as f:
-    f.write(tflite_model)
-
-print(f"TFLite model saved to {TFLITE_MODEL_PATH}")
+if __name__ == "__main__":
+    # Example usage
+    # predicted_variety, confidence = predict("path/to/rice_image.jpg")
+    # print(f"Predicted: {predicted_variety} with {confidence:.2f}% confidence")
+    pass
