@@ -16,6 +16,5 @@ services:
           name: rice-prediction-db
           property: connectionString
 
-  - type: postgresql
+  - type: pserv
     name: rice-prediction-db
-    startCommand: ""
