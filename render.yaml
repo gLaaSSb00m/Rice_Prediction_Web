@@ -18,3 +18,4 @@ services:
 
   - type: pserv
     name: rice-prediction-db
+    runtime: postgresql
