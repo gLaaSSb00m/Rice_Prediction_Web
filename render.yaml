@@ -2,7 +2,7 @@ services:
   - type: web
     name: rice-prediction-app
     env: python
-    envVersion: 3.11
+    envVersion: 3.11.1  # ✅ specify your desired version here
     buildCommand: |
       pip install --upgrade pip
       pip install -r requirements.txt
