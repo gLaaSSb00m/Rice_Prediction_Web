@@ -1,8 +1,9 @@
+env: python
+envVersion: 3.11.1  # 👈 must be at the top level, not inside 'services'
+
 services:
   - type: web
     name: rice-prediction-app
-    env: python
-    envVersion: 3.11.1  # ✅ specify your desired version here
     buildCommand: |
       pip install --upgrade pip
       pip install -r requirements.txt
@@ -16,6 +17,7 @@ services:
       - key: ALLOWED_HOSTS
         value: "rice-prediction-web.onrender.com"
     autoDeploy: true
+
   - type: pserv
     name: rice-prediction-db
     runtime: postgres
