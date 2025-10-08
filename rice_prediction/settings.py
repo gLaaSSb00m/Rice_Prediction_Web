@@ -47,7 +47,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'prediction',
     'whitenoise.runserver_nostatic',  # add this line
-    'rest_framework',
     'corsheaders',
 ]
 
