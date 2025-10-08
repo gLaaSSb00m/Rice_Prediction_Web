@@ -2,11 +2,12 @@ services:
   - type: web
     name: rice-prediction-app
     env: python
+    envVersion: 3.11
     buildCommand: |
       pip install --upgrade pip
       pip install -r requirements.txt
     startCommand: |
-      gunicorn your_project_name.wsgi:application --bind 0.0.0.0:$PORT
+      gunicorn rice_prediction.wsgi:application --bind 0.0.0.0:$PORT
     envVars:
       - key: DATABASE_URL
         value: postgresql://r_dot_db_user:XxHqnxouFEGHMspbwBGzi0BpPizIdm9x@dpg-d3def6ripnbc73c9iflg-a/r_dot_db
@@ -15,3 +16,6 @@ services:
       - key: ALLOWED_HOSTS
         value: "rice-prediction-web.onrender.com"
     autoDeploy: true
+  - type: pserv
+    name: rice-prediction-db
+    runtime: postgres
