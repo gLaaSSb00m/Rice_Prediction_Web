@@ -9,7 +9,7 @@ services:
       gunicorn your_project_name.wsgi:application --bind 0.0.0.0:$PORT
     envVars:
       - key: DATABASE_URL
-        value: your-database-url-here
+        value: postgresql://r_dot_db_user:XxHqnxouFEGHMspbwBGzi0BpPizIdm9x@dpg-d3def6ripnbc73c9iflg-a/r_dot_db
       - key: DEBUG
         value: "False"
       - key: ALLOWED_HOSTS
