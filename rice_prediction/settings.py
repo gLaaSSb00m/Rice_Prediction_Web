@@ -34,8 +34,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY
 SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "unsafe-default")
-ALLOWED_HOSTS = ["*"]  # Replace "*" with your Render app domain in production
-CSRF_TRUSTED_ORIGINS = []
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "*").split(",") if os.environ.get("ALLOWED_HOSTS") else ["*"]
+CSRF_TRUSTED_ORIGINS = [os.environ.get("CSRF_TRUSTED_ORIGINS")] if os.environ.get("CSRF_TRUSTED_ORIGINS") else []
 
 # Applications
 INSTALLED_APPS = [
@@ -86,13 +86,10 @@ WSGI_APPLICATION = 'rice_prediction.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+import dj_database_url
 
-# Database (SQLite for demo; use PostgreSQL for production)
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    'default': dj_database_url.config(default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}")
 }
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators

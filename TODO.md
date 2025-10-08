@@ -1,3 +1,11 @@
 - [x] Remove 'rest_framework' from INSTALLED_APPS in rice_prediction/settings.py (already removed)
 - [x] Remove djangorestframework from requirements.txt
 - [x] Delete prediction/serializers.py
+- [x] Add dj-database-url to requirements.txt
+- [x] Configure database in settings.py to use dj-database-url
+- [x] Update ALLOWED_HOSTS and CSRF_TRUSTED_ORIGINS to use environment variables
+- [ ] Push code to GitHub repository
+- [ ] Create a Render account (if not already)
+- [ ] Connect GitHub repository to Render
+- [ ] Deploy the application on Render
+- [ ] Verify the deployment and database connection
