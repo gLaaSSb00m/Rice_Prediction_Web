@@ -90,13 +90,13 @@ WSGI_APPLICATION = 'rice_prediction.wsgi.application'
 import dj_database_url
 import os
 
+import dj_database_url
+import os
+
 DATABASES = {
-    'default': dj_database_url.config(
-        default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
-        conn_max_age=600,
-        ssl_require=True  # ✅ important for Render Postgres
-    )
+    'default': dj_database_url.config(default='sqlite:///db.sqlite3')
 }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
