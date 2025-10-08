@@ -1,7 +1,7 @@
 services:
   - type: web
     name: rice-prediction
-    runtime: python3
+    env: python
     buildCommand: pip install -r requirements.txt
     startCommand: gunicorn rice_prediction.wsgi:application --bind 0.0.0.0:$PORT --workers 1 --timeout 300
     envVars:
@@ -16,7 +16,6 @@ services:
           name: rice-prediction-db
           property: connectionString
 
-  - type: pserv
+  - type: postgresql
     name: rice-prediction-db
-    runtime: postgresql
-    ipAllowList: []  # Only accessible from other services in this project
+    startCommand: ""

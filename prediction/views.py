@@ -101,6 +101,16 @@ def predict(request):
             rice_info_obj = RiceInfo.objects.filter(variety_name=predicted_class).first()
             rice_info = rice_info_obj.info if rice_info_obj else "No info available."
 
+            # Close the image
+            image.close()
+
+            # Delete the uploaded image file if it's a temporary file
+            if hasattr(image_file, 'temporary_file_path'):
+                try:
+                    os.remove(image_file.temporary_file_path())
+                except OSError:
+                    pass  # Ignore if deletion fails
+
             return JsonResponse({
                 "predicted_variety": predicted_class,
                 "confidence": confidence,
