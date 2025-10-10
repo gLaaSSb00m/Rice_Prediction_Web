@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}Home - Rice Prediction System{% endblock %}
 
@@ -6,8 +7,8 @@
 <div class="container mt-5">
     <div class="row">
         <div class="col-md-8 offset-md-2">
-            <div class="jumbotron bg-light p-5 rounded" style="background: linear-gradient(135deg, #28a745 0%, #20c997 100%) !important;">
-                <img src="{% static 'asset/RiceVision.png' %}" alt="Rice Vision Logo" class="img-fluid mb-3">
+            <div class="jumbotron bg-light p-4 rounded" style="background: linear-gradient(135deg, #28a745 0%, #20c997 100%) !important;">
+                <img src="{% static 'asset/RiceVision.png' %}" alt="Rice Vision Logo" style="width: 150px; height: auto;" class="d-block mx-auto mb-3">
                 <h1 class="display-4 text-success text-white">Rice Prediction System</h1>
                 <p class="lead">Welcome to our advanced rice yield prediction system. Using machine learning algorithms, we help farmers and agricultural professionals predict rice yields based on various environmental and agricultural factors.</p>
                 <hr class="my-4">

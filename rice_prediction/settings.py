@@ -48,8 +48,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'prediction',
     'whitenoise.runserver_nostatic',  # add this line
-    'corsheaders'
-    # 'sslserver',
+    'corsheaders',
+    'sslserver',
 ]
 
 # Middleware
