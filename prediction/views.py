@@ -7,7 +7,7 @@ from tensorflow.keras.applications import VGG16
 from tensorflow.keras.layers import GlobalAveragePooling2D, Dropout, Dense, BatchNormalization
 from tensorflow.keras.regularizers import l2
 from django.shortcuts import render
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.cache import never_cache
 from django.conf import settings
@@ -36,7 +36,7 @@ IMAGE_SIZE = (224, 224)
 # Load classes and model from DB
 def load_classes_and_model():
     rice_classes = list(RiceInfo.objects.values_list('variety_name', flat=True))
-    active_model = RiceModel.objects.filter(is_active=True).first()  
+    active_model = RiceModel.objects.filter(is_active=True).first()
     return rice_classes, active_model
 
 RICE_CLASSES, ACTIVE_MODEL = load_classes_and_model()
@@ -126,3 +126,21 @@ def predict(request):
 
 def home(request):
     return render(request, "prediction/home.html")
+
+# New endpoint to get active model
+def get_model(request):
+    active_model = RiceModel.objects.filter(is_active=True).first()
+    if not active_model or not active_model.tflite_file or not os.path.exists(active_model.tflite_file.path):
+        return JsonResponse({"error": "No active model available"}, status=404)
+    try:
+        with open(active_model.tflite_file.path, 'rb') as f:
+            response = HttpResponse(f.read(), content_type='application/octet-stream')
+            response['Content-Disposition'] = f'attachment; filename="{active_model.name}.tflite"'
+            return response
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=500)
+
+# New endpoint to get rice info
+def get_rice_info(request):
+    rice_infos = list(RiceInfo.objects.values('variety_name', 'info', 'updated_at'))
+    return JsonResponse({"rice_infos": rice_infos})

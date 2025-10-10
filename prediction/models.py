@@ -39,6 +39,13 @@ class RiceModel(models.Model):
         help_text="Path to the .h5 model file"
     )
 
+    tflite_file = models.FileField(
+        upload_to='models/',
+        null=True,
+        blank=True,
+        help_text="Path to the .tflite model file"
+    )
+
     is_active = models.BooleanField(
         default=False,
         help_text="Whether this model is currently active"
