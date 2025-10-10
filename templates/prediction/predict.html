@@ -12,22 +12,32 @@
                     <h5 class="mb-0 text-white">Upload Rice Data</h5>
                 </div>
                 <div class="card-body">
-                    <form id="predictionForm" enctype="multipart/form-data">
-                        {% csrf_token %}
-                        <div class="mb-3">
-                            <label for="rice_image" class="form-label">Upload Image (e.g., png, jpg)</label>
-                            <input type="file" class="form-control" id="rice_image" name="rice_image" required>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <form id="predictionForm" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <div class="mb-3">
+                                    <label for="rice_image" class="form-label">Upload Image (e.g., png, jpg)</label>
+                                    <input type="file" class="form-control" id="rice_image" name="rice_image" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="variety" class="form-label">Rice Variety Name</label>
+                                    <input type="text" class="form-control" id="variety" name="variety" readonly>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="info" class="form-label">Rice Info</label>
+                                    <textarea class="form-control" id="info" name="info" rows="3" readonly></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-success">Submit</button>
+                            </form>
                         </div>
-                        <div class="mb-3">
-                            <label for="variety" class="form-label">Rice Variety Name</label>
-                            <input type="text" class="form-control" id="variety" name="variety" readonly>
+                        <div class="col-md-6">
+                            <div class="mt-4">
+                                <h5>Uploaded Image:</h5>
+                                <img id="uploadedImage" src="/media/predictions/current.jpg" alt="Uploaded Image" class="img-fluid" style="max-height: 300px; display: none;">
+                            </div>
                         </div>
-                        <div class="mb-3">
-                            <label for="info" class="form-label">Rice Info</label>
-                            <textarea class="form-control" id="info" name="info" rows="3" readonly></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-success">Submit</button>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>
@@ -51,6 +61,11 @@ document.getElementById('predictionForm').addEventListener('submit', function(e)
     .then(data => {
         document.getElementById('variety').value = data.predicted_variety;
         document.getElementById('info').value = data.rice_info;
+
+        // Show and refresh the uploaded image
+        const uploadedImage = document.getElementById('uploadedImage');
+        uploadedImage.src = "/media/predictions/current.jpg?t=" + new Date().getTime();
+        uploadedImage.style.display = 'block';
     })
     .catch(error => {
         console.error('Error:', error);
