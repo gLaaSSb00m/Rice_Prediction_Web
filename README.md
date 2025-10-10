@@ -7,13 +7,25 @@ The Rice Classification System is a web-based application that leverages deep le
 ## Screenshots
 
 ### Home Page
-![Home Page](asset/home.png)
+![Home Page](static/asset/Screenshot 2025-10-10 223911.png)
 
 ### Before Prediction
-![Before Prediction](asset/before_prediction.png)
+![Before Prediction](static/asset/before.png)
 
 ### After Prediction
-![After Prediction](asset/after_prediction.png)
+![After Prediction](static/asset/after.png)
+
+### Admin Panel Rice Info List
+![Rice Info List](static/asset/rice_info_list.png)
+
+### Admin Panel Rice List
+![Rice Info Edit](static/asset/Rice_info_can_edit.png)
+
+### Admin Panel Model List
+![Model List](static/asset/model_list.png)
+
+### Admin Panel Model Edit
+![Model Edit](static/asset/model_edit.png)
 
 ## Components Used
 
