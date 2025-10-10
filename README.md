@@ -7,7 +7,7 @@ The Rice Classification System is a web-based application that leverages deep le
 ## Screenshots
 
 ### Home Page
-![Home Page](static/asset/Screenshot 2025-10-10 223911.png)
+![Home Page](static/asset/index.png)
 
 ### Before Prediction
 ![Before Prediction](static/asset/before.png)
