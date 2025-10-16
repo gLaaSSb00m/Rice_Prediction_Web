@@ -1,20 +1,11 @@
-# TODO: Implement Flutter App Synchronization with Django
+# TODO: Integrate Ensemble Model with Model Selection Dropdown
 
-## Django Backend Changes
-- [x] Add `get_model` endpoint to serve the active ML model file
-- [x] Add `get_rice_info` endpoint to serve rice varieties information as JSON
-- [x] Update prediction/urls.py to include new endpoints
+## Steps to Complete
 
-## Flutter App Changes
-- [x] Update pubspec.yaml with new dependencies: connectivity_plus, http, path_provider, shared_preferences
-- [x] Modify main.dart to:
-  - [x] Add connectivity check
-  - [x] Add sync service to download model and rice info when online
-  - [x] Change model loading from asset to local file
-  - [x] Store and load rice classes from local storage
-  - [x] Update prediction logic to use local data
-
-## Testing
-- [x] Test Django endpoints
-- [x] Test Flutter sync functionality
-- [x] Verify offline functionality
+- [x] Update `prediction/management/commands/populate_db.py` to add RiceModel entries for MobileNetV2 and XGBoost models.
+- [x] Modify `prediction/views.py` to load all models, add model selection parameter, and implement ensemble prediction logic.
+- [x] Update `templates/prediction/predict.html` to include a dropdown for model selection (VGG16 or Ensemble).
+- [x] Run the `populate_db` management command to add new model entries to the database.
+- [x] Test predictions with both VGG16 and Ensemble models to ensure functionality.
+- [x] Verify image preprocessing matches for ensemble model.
+- [x] Fix XGBoost feature dimension mismatch (1792 vs 1) - need to reshape features properly.

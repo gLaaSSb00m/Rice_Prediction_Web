@@ -30,18 +30,25 @@ class Command(BaseCommand):
             )
         self.stdout.write(self.style.SUCCESS(f'Populated {len(RICE_CLASSES)} rice varieties.'))
 
-        # Populate RiceModel with the .h5 file
-        model_path = os.path.join(settings.BASE_DIR, 'models', 'best_VGG16_stage2.weights.h5')
-        if os.path.exists(model_path):
-            with open(model_path, 'rb') as f:
-                file_obj = File(f, name='best_VGG16_stage2.weights.h5')
-                model, created = RiceModel.objects.get_or_create(
-                    name='VGG16 Rice Classifier',
-                    defaults={'model_file': file_obj, 'is_active': True}
-                )
-                if created:
-                    self.stdout.write(self.style.SUCCESS('Created RiceModel with the .h5 file.'))
-                else:
-                    self.stdout.write(self.style.SUCCESS('RiceModel already exists.'))
-        else:
-            self.stdout.write(self.style.ERROR(f'Model file not found at {model_path}'))
+        # Populate RiceModel with the .h5 files
+        models_to_add = [
+            ('VGG16 Rice Classifier', 'best_VGG16_stage2.weights.h5'),
+            ('MobileNetV2 Rice Classifier', 'MobileNetV2_rice62_final.weights.h5'),
+            ('XGBoost Meta Model', 'xgb_meta_model.json'),
+        ]
+
+        for model_name, file_name in models_to_add:
+            model_path = os.path.join(settings.BASE_DIR, 'models', file_name)
+            if os.path.exists(model_path):
+                with open(model_path, 'rb') as f:
+                    file_obj = File(f, name=file_name)
+                    model, created = RiceModel.objects.get_or_create(
+                        name=model_name,
+                        defaults={'model_file': file_obj, 'is_active': True}
+                    )
+                    if created:
+                        self.stdout.write(self.style.SUCCESS(f'Created RiceModel: {model_name}'))
+                    else:
+                        self.stdout.write(self.style.SUCCESS(f'RiceModel {model_name} already exists.'))
+            else:
+                self.stdout.write(self.style.ERROR(f'Model file not found at {model_path}'))
