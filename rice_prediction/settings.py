@@ -34,8 +34,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY
 SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "unsafe-default")
-# ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "rice-prediction-web.onrender.com").split(",")
-ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "rice-prediction-web.onrender.com").split(",")
+# ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
 CSRF_TRUSTED_ORIGINS = [os.environ.get("CSRF_TRUSTED_ORIGINS")] if os.environ.get("CSRF_TRUSTED_ORIGINS") else []
 
 # Applications
