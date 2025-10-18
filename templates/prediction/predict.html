@@ -1,12 +1,13 @@
 {% extends 'base.html' %}
 
-{% block title %}Predict - Rice Prediction System{% endblock %}
+{% block title %}Predict - RiceVision System{% endblock %}
 
 {% block content %}
 <div class="container mt-5">
     <div class="row">
         <div class="col-md-8 offset-md-2">
-            <h1 class="text-success mb-4">Rice Yield Prediction</h1>
+            <h1 class="text-success mb-4">RiceVision Prediction</h1>
+            
             <div class="card">
                 <div class="card-header bg-success text-white">
                     <h5 class="mb-0 text-white">Upload Rice Data</h5>
@@ -25,7 +26,7 @@
                                     </select>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="rice_image" class="form-label">Upload Image (e.g., png, jpg)</label>
+                                    <label for="rice_image" class="form-label">Upload at least 3x zoomed Single Rice Grain (e.g., png, jpg)</label>
                                     <input type="file" class="form-control" id="rice_image" name="rice_image" required>
                                 </div>
                                 <div class="mb-3">
