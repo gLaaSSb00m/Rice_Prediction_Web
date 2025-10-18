@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-=r+rc=t8hrnbhf8*iid^p65(r3!#99_4k=6hqq_26utdz-ft0m'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 # Application definition
 
@@ -34,8 +34,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY
 SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "unsafe-default")
-ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "rice-prediction-web.onrender.com").split(",")
-# ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
+# ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "rice-prediction-web.onrender.com").split(",")
+ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
 CSRF_TRUSTED_ORIGINS = [os.environ.get("CSRF_TRUSTED_ORIGINS")] if os.environ.get("CSRF_TRUSTED_ORIGINS") else []
 
 # Applications
@@ -49,7 +49,6 @@ INSTALLED_APPS = [
     'prediction',
     'whitenoise.runserver_nostatic',  # add this line
     'corsheaders',
-    'sslserver',
 ]
 
 # Middleware

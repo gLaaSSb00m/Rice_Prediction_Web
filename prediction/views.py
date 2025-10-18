@@ -10,6 +10,9 @@ from tensorflow.keras.preprocessing import image
 from tensorflow.keras.applications.vgg16 import preprocess_input as vgg_preprocess
 from tensorflow.keras.applications.mobilenet_v2 import preprocess_input as mobilenet_preprocess
 from xgboost import XGBClassifier
+import torch
+from torchvision import transforms
+from transformers import ViTForImageClassification
 from django.shortcuts import render
 from django.http import JsonResponse, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -44,9 +47,10 @@ def load_classes_and_models():
     vgg_model = models.filter(name='VGG16 Rice Classifier').first()
     mobile_model = models.filter(name='MobileNetV2 Rice Classifier').first()
     xgb_model = models.filter(name='XGBoost Meta Model').first()
-    return rice_classes, vgg_model, mobile_model, xgb_model
+    vit_model = models.filter(name='ViT Rice Classifier').first()
+    return rice_classes, vgg_model, mobile_model, xgb_model, vit_model
 
-RICE_CLASSES, VGG_MODEL, MOBILE_MODEL, XGB_MODEL = load_classes_and_models()
+RICE_CLASSES, VGG_MODEL, MOBILE_MODEL, XGB_MODEL, VIT_MODEL = load_classes_and_models()
 
 # -----------------------------
 # Build + Load models
@@ -105,6 +109,27 @@ with strategy.scope():
     else:
         print("[ERROR] XGBoost model file not found")
 
+# Load ViT model outside strategy scope since it's PyTorch
+vit_classifier = None
+if VIT_MODEL and os.path.exists(VIT_MODEL.model_file.path):
+    vit_classifier = ViTForImageClassification.from_pretrained(
+        'google/vit-base-patch16-224',
+        num_labels=len(RICE_CLASSES),
+        ignore_mismatched_sizes=True
+    )
+    vit_classifier.load_state_dict(torch.load(VIT_MODEL.model_file.path, map_location='cpu'))
+    vit_classifier.eval()
+    print("✅ Loaded ViT model from:", VIT_MODEL.model_file.path)
+else:
+    print("[ERROR] ViT model file not found")
+
+# ViT transform
+vit_transform = transforms.Compose([
+    transforms.Resize(IMAGE_SIZE),
+    transforms.ToTensor(),
+    transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+])
+
 # -----------------------------
 # Helper Functions
 # -----------------------------
@@ -146,6 +171,17 @@ def predict(request):
                 stacked_feat = np.hstack([feat_vgg, feat_mobile]).reshape(1, -1)  # Reshape to (1, num_features)
                 pred_index = xgb_classifier.predict(stacked_feat)[0]
                 confidence = float(xgb_classifier.predict_proba(stacked_feat).max() * 100)
+            elif model_type == "vit":
+                # ViT prediction
+                if vit_classifier is None:
+                    return JsonResponse({"error": "ViT model not loaded"}, status=500)
+                img_tensor = vit_transform(image).unsqueeze(0)
+                with torch.no_grad():
+                    outputs = vit_classifier(img_tensor)
+                    logits = outputs.logits
+                    probs = torch.softmax(logits, dim=1)
+                    pred_index = torch.argmax(probs, dim=1).item()
+                    confidence = float(probs[0][pred_index].item() * 100)
             else:
                 # VGG16 prediction
                 image_resized = image.resize(IMAGE_SIZE)
@@ -184,20 +220,4 @@ def predict(request):
 def home(request):
     return render(request, "prediction/home.html")
 
-# New endpoint to get active model
-def get_model(request):
-    active_model = RiceModel.objects.filter(is_active=True).first()
-    if not active_model or not active_model.tflite_file or not os.path.exists(active_model.tflite_file.path):
-        return JsonResponse({"error": "No active model available"}, status=404)
-    try:
-        with open(active_model.tflite_file.path, 'rb') as f:
-            response = HttpResponse(f.read(), content_type='application/octet-stream')
-            response['Content-Disposition'] = f'attachment; filename="{active_model.name}.tflite"'
-            return response
-    except Exception as e:
-        return JsonResponse({"error": str(e)}, status=500)
 
-# New endpoint to get rice info
-def get_rice_info(request):
-    rice_infos = list(RiceInfo.objects.values('variety_name', 'info', 'updated_at'))
-    return JsonResponse({"rice_infos": rice_infos})
