@@ -6,11 +6,11 @@
 <div class="container mt-5">
     <div class="row">
         <div class="col-md-8 offset-md-2">
-            <h1 class="text-success mb-4">RiceVision Prediction</h1>
+            <h1 class="text-success mb-4">Rice Variety Classification</h1>
             
             <div class="card">
                 <div class="card-header bg-success text-white">
-                    <h5 class="mb-0 text-white">Upload Rice Data</h5>
+                    <h5 class="mb-0 text-white">Upload Rice Grain Image</h5>
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -20,9 +20,9 @@
                                 <div class="mb-3">
                                     <label for="model_type" class="form-label">Select Model</label>
                                     <select class="form-control" id="model_type" name="model_type">
-                                        <option value="vgg16">VGG16</option>
+                                        <option value="vgg16">Transfer-Learning Model</option>
                                         <option value="vit">Vision Transformer (ViT)</option>
-                                        <option value="ensemble">Ensemble (VGG16 + MobileNetV2 + XGBoost)</option>
+                                        <option value="ensemble">Ensemble Model</option>
                                     </select>
                                 </div>
                                 <div class="mb-3">
@@ -30,11 +30,11 @@
                                     <input type="file" class="form-control" id="rice_image" name="rice_image" required>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="variety" class="form-label">Rice Variety Name</label>
+                                    <label for="variety" class="form-label">Possible Rice Variety Name</label>
                                     <input type="text" class="form-control" id="variety" name="variety" readonly>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="info" class="form-label">Rice Info</label>
+                                    <label for="info" class="form-label">Information about your Rice</label>
                                     <textarea class="form-control" id="info" name="info" rows="3" readonly></textarea>
                                 </div>
                                 <button type="submit" class="btn btn-success" id="submitBtn">
